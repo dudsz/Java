@@ -26,7 +26,6 @@ public class PhpConnect {
     
 	public PhpConnect() throws Exception {
 	
-<<<<<<< HEAD
 		//urlPost(username, pass, email);
 		//addWish("markus", "Fodelsedag", "Jobb", "Pengar", "Sverige");
 		//addWish("markus", "Jul", "Spenat", "Mat", "Overallt");
@@ -257,11 +256,6 @@ public class PhpConnect {
 
 	public void getWishList (String un, String wl) throws Exception {
 		URL url = new URL("http://ec2-54-191-47-17.us-west-2.compute.amazonaws.com/test_wishes/getWl.php");
-=======
-		urlPost(username, pass, email);
-		//urlLoginPost(username, pass);
-		//urlDeletePost(del, username2);
->>>>>>> 1268ace4a8e90b2fc17625e8aba9e4c0e191bdfd
 		
 		// Set parameters to be sent
 		Map<String,Object> params = new LinkedHashMap<>();
@@ -351,7 +345,7 @@ public class PhpConnect {
 			        sb.append(line);
 			        }
 		    System.out.println("Insert: " + sb.toString());
-<<<<<<< HEAD
+
 		    String response = sb.toString();
 		   
 		    JSONParser p = new JSONParser();
@@ -360,10 +354,7 @@ public class PhpConnect {
 		    
 		    System.out.println("Test: " + obj);
 		    System.out.println("Got: " + obj.get("success") + "\n");
-		    
-		    
-=======
->>>>>>> 1268ace4a8e90b2fc17625e8aba9e4c0e191bdfd
+
 		} catch (IOException e) { 
 			e.printStackTrace(); 
 		} catch (Exception e) { 
