@@ -84,7 +84,6 @@ public class PhpConnect {
 		    long ln = (long) obj.get("success");
 		    
 		    System.out.println("Test: " + obj);
-		    System.out.println("Test: " + ln);
 		    System.out.println("Got: " + obj.get("success") + "\n");
 		    
 		    
@@ -194,7 +193,6 @@ public class PhpConnect {
 		    long ln = (long) obj.get("success");
 		    
 		    System.out.println("Test: " + obj);
-		    System.out.println("Success: " + ln);
 		    System.out.println("Got: " + obj.get("success") + "\n");
 		    
 		    
@@ -361,7 +359,6 @@ public class PhpConnect {
 		    long ln = (long) obj.get("success");
 		    
 		    System.out.println("Test: " + obj);
-		    System.out.println("Test: " + ln);
 		    System.out.println("Got: " + obj.get("success") + "\n");
 		    
 		    
@@ -461,18 +458,3 @@ public class PhpConnect {
 	}
 }
 
-/*Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-
-//for (int c; (c = in.read()) >= 0;)
-String s = "";
-	while ((s = in.readLine()) != null) {
-        response += s;
-      }
-   // System.out.print((char)c);
-} catch (Exception e) {
-	System.out.println("Error: " + e);
-<<<<<<< HEAD
-}*/
-=======
-}*/
->>>>>>> 1268ace4a8e90b2fc17625e8aba9e4c0e191bdfd
