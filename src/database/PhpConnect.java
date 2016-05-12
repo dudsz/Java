@@ -474,9 +474,10 @@ public class PhpConnect {
 		    while ((line = reader.readLine()) != null) {
 			        sb.append(line);
 			        }
-		    System.out.println("Lists: " + sb.toString());
+		    System.out.println("Lists: " + sb.toString() + "\n");
 		    String response = sb.toString();
 		    String[] parts = new String[5];
+		    String[] stuff = {"Code", "Name", "Year high", "Year low", "Price"};
 		    
 		    JSONParser p = new JSONParser();
 		    JSONObject obj = (JSONObject) p.parse(response);
@@ -498,9 +499,10 @@ public class PhpConnect {
 		    parts[3] = yLow;
 		    parts[4] = price;
 		    
-		    System.out.println("Code: " + parts[0] + ", Name: " + parts[1] + ", Year high: " + parts[2] 
-		    		+ ", Year low: " + parts[3] + ", Current price: " + parts[4] + "\n");
-		    
+		    for (int i = 0; i < parts.length; i++) {
+		    	System.out.println(stuff[i] + ": " + parts[i]);
+		    }
+			   		    
 		} catch (IOException e) { 
 			e.printStackTrace(); 
 		} catch (Exception e) { 
@@ -527,9 +529,10 @@ public class PhpConnect {
 		    while ((line = reader.readLine()) != null) {
 			        sb.append(line);
 			        }
-		    System.out.println("Lists: " + sb.toString() + "\n");
+		    System.out.println("\nLists: " + sb.toString() + "\n");
 		    String response = sb.toString();
 		    String[] parts = new String[7];
+		    String[] stuff = {"Code", "Name", "Year high", "Year low", "Days high", "Days low", "Price"};
 		    
 		    JSONParser p = new JSONParser();
 		    JSONObject obj = (JSONObject) p.parse(response);
@@ -554,9 +557,9 @@ public class PhpConnect {
 		    parts[5] = dLow;
 		    parts[6] = price;
 		    
-		    System.out.println("Code: " + parts[0] + ", Name: " + parts[1] + ", Year high: " + parts[2] 
-		    		+ ", Year low: " + parts[3] + " \nDays high: " + parts[4] + ", Days low: " + parts[5] 
-		    		+ ", Current price: " + parts[6]);
+		    for (int i = 0; i < parts.length; i++) {
+		    	System.out.println(stuff[i] + ": " + parts[i]);
+		    }
 		    
 		} catch (IOException e) { 
 			e.printStackTrace(); 
