@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -32,9 +33,11 @@ public class PhpConnect {
 		//delWish("markus", "Jul", "Spenat");
 		//getWish("markus", "Jul", "Spenat");
 		//getLists("markus");
-		getWishList("markus", "Jul");
+		//getWishList("markus", "Jul");
 		//urlLoginPost(username, pass);
 		//urlDeletePost(del, username2);
+		getStocks();
+		getStocksYQL(); // Seems less accurate
 		
 	}
 	public void addWish (String un, String wl, String wn, String wd, String wpl) throws Exception {
@@ -83,6 +86,7 @@ public class PhpConnect {
 		    long ln = (long) obj.get("success");
 		    
 		    System.out.println("Test: " + obj);
+		    System.out.println("Test: " + ln);
 		    System.out.println("Got: " + obj.get("success") + "\n");
 		    
 		    
@@ -192,6 +196,7 @@ public class PhpConnect {
 		    long ln = (long) obj.get("success");
 		    
 		    System.out.println("Test: " + obj);
+		    System.out.println("Success: " + ln);
 		    System.out.println("Got: " + obj.get("success") + "\n");
 		    
 		    
@@ -447,5 +452,118 @@ public class PhpConnect {
 			e.printStackTrace(); 
 		}
 	}
+
+	public void getStocks () throws Exception {
+		URL url1 = new URL("http://finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote?format=json");
+		URL url = new URL("http://finance.yahoo.com/webservice/v1/symbols/AAPL,YHOO/quote?format=json&view=detail");
+		URL url2 = new URL("https://www.quandl.com/api/v3/datasets/WIKI/FB/data.json");
+		// Symbol, Name, Ask, DaysLow, DaysHigh, YearLow, YearHigh, Currency
+				
+        // Set properties of request
+		conn = (HttpURLConnection)url.openConnection();
+		conn.setDoOutput(true);
+		conn.setRequestMethod("GET");
+		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		
+		try {
+			// Get response
+			StringBuilder sb = new StringBuilder();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			String line = null;
+
+		    while ((line = reader.readLine()) != null) {
+			        sb.append(line);
+			        }
+		    System.out.println("Lists: " + sb.toString());
+		    String response = sb.toString();
+		    String[] parts = new String[5];
+		    
+		    JSONParser p = new JSONParser();
+		    JSONObject obj = (JSONObject) p.parse(response);
+		    JSONObject li = (JSONObject) obj.get("list");
+		    JSONArray resources = (JSONArray) li.get("resources");
+		    // Ta båda
+		    JSONObject res = (JSONObject) resources.get(0);
+		    JSONObject result = (JSONObject) res.get("resource");	
+		    JSONObject stock = (JSONObject) result.get("fields");	
+		    
+		    String name = (String) stock.get("issuer_name");
+		    String code = (String) stock.get("symbol");
+		    String yHigh = (String) stock.get("year_high");
+		    String yLow = (String) stock.get("year_low");
+		    String price = (String) stock.get("price");
+		    parts[0] = code;
+		    parts[1] = name;
+		    parts[2] = yHigh;
+		    parts[3] = yLow;
+		    parts[4] = price;
+		    
+		    System.out.println("Code: " + parts[0] + ", Name: " + parts[1] + ", Year high: " + parts[2] 
+		    		+ ", Year low: " + parts[3] + ", Current price: " + parts[4] + "\n");
+		    
+		} catch (IOException e) { 
+			e.printStackTrace(); 
+		} catch (Exception e) { 
+			e.printStackTrace(); 
+		}
+	}
+	
+	public void getStocksYQL () throws Exception {
+		URL url = new URL("https://query.yahooapis.com/v1/public/yql?q=select%20Symbol%2C%20Name%2C%20YearHigh%2C%20YearLow%2C%20DaysLow%2C%20DaysHigh%2C%20Ask%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22AAPL%22%2C%20%22YHOO%22)&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=");
+		// Symbol, Name, Ask, DaysLow, DaysHigh, YearLow, YearHigh, Currency
+				
+        // Set properties of request
+		conn = (HttpURLConnection)url.openConnection();
+		conn.setDoOutput(true);
+		conn.setRequestMethod("GET");
+		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		
+		try {
+			// Get response
+			StringBuilder sb = new StringBuilder();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			String line = null;
+
+		    while ((line = reader.readLine()) != null) {
+			        sb.append(line);
+			        }
+		    System.out.println("Lists: " + sb.toString() + "\n");
+		    String response = sb.toString();
+		    String[] parts = new String[7];
+		    
+		    JSONParser p = new JSONParser();
+		    JSONObject obj = (JSONObject) p.parse(response);
+		    JSONObject li = (JSONObject) obj.get("query");
+		    JSONObject res = (JSONObject) li.get("results");
+		    JSONArray quote = (JSONArray) res.get("quote");
+		    // Ta Båda
+		    JSONObject stock = (JSONObject) quote.get(0);
+		            
+		    String name = (String) stock.get("Name"); 
+		    String code = (String) stock.get("Symbol");
+		    String yHigh = (String) stock.get("YearHigh");
+		    String yLow = (String) stock.get("YearLow");
+		    String dHigh = (String) stock.get("DaysHigh");
+		    String dLow = (String) stock.get("DaysLow");
+		    String price = (String) stock.get("Ask");
+		    parts[0] = code;
+		    parts[1] = name;
+		    parts[2] = yHigh;
+		    parts[3] = yLow;
+		    parts[4] = dHigh;
+		    parts[5] = dLow;
+		    parts[6] = price;
+		    
+		    System.out.println("Code: " + parts[0] + ", Name: " + parts[1] + ", Year high: " + parts[2] 
+		    		+ ", Year low: " + parts[3] + " \nDays high: " + parts[4] + ", Days low: " + parts[5] 
+		    		+ ", Current price: " + parts[6]);
+		    
+		} catch (IOException e) { 
+			e.printStackTrace(); 
+		} catch (Exception e) { 
+			e.printStackTrace(); 
+		}
+	}
+	
 }
 

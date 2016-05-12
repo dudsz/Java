@@ -49,9 +49,9 @@ public class Connect {
 			conn = dbConnect();
 			ps = conn.prepareStatement(query);
 			
-			ps.setString(1, "mia");
-			ps.setString(2, "bla");
-			ps.setString(3, "mia@ka");
+			ps.setString(1, "namn");
+			ps.setString(2, "enamn");
+			ps.setString(3, "em@ail");
 			
 			ps.executeUpdate();
 			System.out.println("User inserted");
